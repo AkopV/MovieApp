@@ -54,7 +54,7 @@ public class MovieFetchr {
         List<Movie> items = new ArrayList<>();
 
         try {
-            String url = Uri.parse("https://api.themoviedb.org/3/movie/top_rated")
+            String url = Uri.parse("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&")
                     .buildUpon()
                     .appendQueryParameter("api_key", API_KEY)
                     .appendQueryParameter("language", "en-US")

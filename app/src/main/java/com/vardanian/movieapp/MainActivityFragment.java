@@ -14,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.network.MovieFetchr;
 
@@ -86,17 +88,26 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
-    private class MovieHolder extends RecyclerView.ViewHolder {
+    private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView movieImageView;
+        private Movie movie = new Movie();
 
         public MovieHolder(View itemView) {
             super(itemView);
             movieImageView = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
+            itemView.setOnClickListener(this);
         }
 
         public void bindDrawable(Drawable drawable) {
             movieImageView.setImageDrawable(drawable);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(),
+                    movie.getTitle() + " clicked!", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -118,6 +129,7 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onBindViewHolder(MovieHolder movieHolder, int position) {
             Movie movie = movies.get(position);
+
             Drawable placeholder = getResources().getDrawable(R.drawable.sw);
             movieHolder.bindDrawable(placeholder);
             downloader.queueThumbnail(movieHolder, movie.getPosterPath());
