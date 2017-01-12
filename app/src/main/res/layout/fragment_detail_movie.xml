@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_detail_movie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        tools:context="com.vardanian.movieapp.DetailMovieActivityFragment"
+        tools:showIn="@layout/activity_detail_movie">
+
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Movie Title"
+            android:gravity="center"
+            style="@style/Base.TextAppearance.AppCompat.Headline"/>
+
+        <ImageView
+            android:id="@+id/detail_poster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_title"/>
+
+        <TextView
+            android:id="@+id/detail_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_poster"
+            android:padding="4dp"
+            android:text="Movie Overview" />
+
+        <TextView
+            android:id="@+id/detail_release_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_overview"
+            android:padding="4dp"
+            android:text="Movie Release Date" />
+
+        <TextView
+            android:id="@+id/detail_popularity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_release_date"
+            android:padding="4dp"
+            android:text="Movie Popularity" />
+    </RelativeLayout>
+</ScrollView>

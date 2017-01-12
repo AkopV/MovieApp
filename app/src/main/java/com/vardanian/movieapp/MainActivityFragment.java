@@ -1,5 +1,7 @@
 package com.vardanian.movieapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -84,19 +86,23 @@ public class MainActivityFragment extends Fragment {
 
     private void setupAdapter() {
         if (isAdded()) {
-            rvMovie.setAdapter(new MovieAdapter(movieItems));
+            rvMovie.setAdapter(new MovieAdapter(getContext(), movieItems));
         }
     }
 
     private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView movieImageView;
-        private Movie movie = new Movie();
+        private Movie movie;
+        private Context context;
 
         public MovieHolder(View itemView) {
             super(itemView);
+            movie = new Movie();
             movieImageView = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
+            context = itemView.getContext();
             itemView.setOnClickListener(this);
+
         }
 
         public void bindDrawable(Drawable drawable) {
@@ -105,17 +111,19 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(),
-                    movie.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+            Intent intent = new Intent(getActivity(), DetailMovieActivity.class);
+            intent.putExtra(Movie.class.getName(), movie);
+            v.getContext().startActivity(intent);
         }
     }
 
     private class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
 
         private List<Movie> movies;
+        private Context context;
 
-        public MovieAdapter(List<Movie> movies) {
+        public MovieAdapter(Context context, List<Movie> movies) {
+            this.context = context;
             this.movies = movies;
         }
 
@@ -128,11 +136,14 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MovieHolder movieHolder, int position) {
-            Movie movie = movies.get(position);
-
+            movieHolder.movie = getItem(position);
             Drawable placeholder = getResources().getDrawable(R.drawable.sw);
             movieHolder.bindDrawable(placeholder);
-            downloader.queueThumbnail(movieHolder, movie.getPosterPath());
+            downloader.queueThumbnail(movieHolder, movieHolder.movie.getPosterPath());
+        }
+
+        public Movie getItem(int position) {
+            return movies != null ? movies.get(position) : null;
         }
 
         @Override
