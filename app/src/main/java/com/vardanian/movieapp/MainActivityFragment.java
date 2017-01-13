@@ -105,6 +105,7 @@ public class MainActivityFragment extends Fragment {
 
         }
 
+
         public void bindDrawable(Drawable drawable) {
             movieImageView.setImageDrawable(drawable);
         }
@@ -137,6 +138,7 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onBindViewHolder(MovieHolder movieHolder, int position) {
             movieHolder.movie = getItem(position);
+
             Drawable placeholder = getResources().getDrawable(R.drawable.sw);
             movieHolder.bindDrawable(placeholder);
             downloader.queueThumbnail(movieHolder, movieHolder.movie.getPosterPath());
