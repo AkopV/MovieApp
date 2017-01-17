@@ -21,6 +21,12 @@ public class MovieFetchr {
 
     private static final String TAG = "MovieFetchr";
     private static final String API_KEY = "a9d3aada0aca0bb26c2f47c7e8207893";
+    private static final String MOVIE_ID = "id";
+    private static final String MOVIE_TITLE = "title";
+    private static final String MOVIE_OVERVIEW = "overview";
+    private static final String MOVIE_RELEASE_DATE = "release_date";
+    private static final String MOVIE_POPULARITY = "popularity";
+    private static final String MOVIE_POSTER_PATH = "poster_path";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -79,12 +85,12 @@ public class MovieFetchr {
         for (int i = 0; i < movieJsonArray.length(); i++) {
             JSONObject movieJsonObject = movieJsonArray.getJSONObject(i);
             Movie movie = new Movie();
-            movie.setId(movieJsonObject.getString("id"));
-            movie.setTitle(movieJsonObject.getString("title"));
-            movie.setOverview(movieJsonObject.getString("overview"));
-            movie.setReleaseDate(movieJsonObject.getString("release_date"));
-            movie.setPopularity(movieJsonObject.getString("popularity"));
-            movie.setPosterPath(movieJsonObject.getString("poster_path"));
+            movie.setId(movieJsonObject.getString(MOVIE_ID));
+            movie.setTitle(movieJsonObject.getString(MOVIE_TITLE));
+            movie.setOverview(movieJsonObject.getString(MOVIE_OVERVIEW));
+            movie.setReleaseDate(movieJsonObject.getString(MOVIE_RELEASE_DATE));
+            movie.setPopularity(movieJsonObject.getString(MOVIE_POPULARITY));
+            movie.setPosterPath(movieJsonObject.getString(MOVIE_POSTER_PATH));
 
             movies.add(movie);
         }

@@ -2,13 +2,10 @@ package com.vardanian.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.network.MovieFetchr;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +30,6 @@ public class MainActivityFragment extends Fragment {
 
     private RecyclerView rvMovie;
     private List<Movie> movieItems = new ArrayList<>();
-    private ThumbnailDownloader<MovieHolder> downloader;
 
     public MainActivityFragment() {
     }
@@ -45,19 +39,6 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         new MovieItemTask().execute();
-
-        Handler responseHandler = new Handler();
-        downloader = new ThumbnailDownloader<>(responseHandler);
-        downloader.setThumbnailDownloadListener(new ThumbnailDownloader.ThumbnailDownloadListener<MovieHolder>(){
-
-            @Override
-            public void onThumbnailDownloaded(MovieHolder movieHolder, Bitmap bitmap) {
-                Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                movieHolder.bindDrawable(drawable);
-            }
-        });
-        downloader.start();
-        downloader.getLooper();
         Log.i(TAG, "Background thread start");
     }
 
@@ -66,22 +47,10 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         rvMovie = (RecyclerView) v.findViewById(R.id.rv_movies);
-        rvMovie.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        rvMovie.setLayoutManager(new GridLayoutManager(getActivity(),
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2));
         setupAdapter();
         return v;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        downloader.clearQueue();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        downloader.quit();
-        Log.i(TAG, "Background thread destroyed");
     }
 
     private void setupAdapter() {
@@ -92,22 +61,24 @@ public class MainActivityFragment extends Fragment {
 
     private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView movieImageView;
+        private ImageView ivMovie;
         private Movie movie;
         private Context context;
 
         public MovieHolder(View itemView) {
             super(itemView);
             movie = new Movie();
-            movieImageView = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
+            ivMovie = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
             context = itemView.getContext();
             itemView.setOnClickListener(this);
-
         }
 
-
-        public void bindDrawable(Drawable drawable) {
-            movieImageView.setImageDrawable(drawable);
+        public void bindMovieItem(Movie movie) {
+            this.movie = movie;
+            Picasso.with(getActivity())
+                    .load(movie.getPosterPath())
+                    .placeholder(R.drawable.sw)
+                    .into(ivMovie);
         }
 
         @Override
@@ -138,10 +109,7 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onBindViewHolder(MovieHolder movieHolder, int position) {
             movieHolder.movie = getItem(position);
-
-            Drawable placeholder = getResources().getDrawable(R.drawable.sw);
-            movieHolder.bindDrawable(placeholder);
-            downloader.queueThumbnail(movieHolder, movieHolder.movie.getPosterPath());
+            movieHolder.bindMovieItem(movieHolder.movie);
         }
 
         public Movie getItem(int position) {
@@ -154,7 +122,7 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
-    private class MovieItemTask extends AsyncTask<Void,Void,List<Movie>> {
+    private class MovieItemTask extends AsyncTask<Void, Void, List<Movie>> {
 
         @Override
         protected List<Movie> doInBackground(Void... params) {

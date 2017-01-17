@@ -23,6 +23,11 @@ import java.util.List;
  */
 public class DetailMovieActivityFragment extends Fragment {
 
+    private static final String OVERVIEW = "OVERVIEW: ";
+    private static final String RELEASE_DATE = "RELEASE DATE: ";
+    private static final String POPULARITY = "POPULARITY: ";
+
+
     private Movie movie;
     private ImageView poster;
     private TextView title;
@@ -52,13 +57,13 @@ public class DetailMovieActivityFragment extends Fragment {
         title.setText(movie.getTitle());
 
         overview = (TextView) v.findViewById(R.id.detail_overview);
-        overview.setText(movie.getOverview());
+        overview.setText(OVERVIEW + movie.getOverview());
 
         releaseDate = (TextView) v.findViewById(R.id.detail_release_date);
-        releaseDate.setText(movie.getReleaseDate());
+        releaseDate.setText(RELEASE_DATE + movie.getReleaseDate());
 
         popularity = (TextView) v.findViewById(R.id.detail_popularity);
-        popularity.setText(movie.getPopularity());
+        popularity.setText(POPULARITY + movie.getPopularity());
 
         return v;
     }
