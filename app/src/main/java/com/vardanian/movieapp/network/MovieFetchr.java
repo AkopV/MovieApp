@@ -3,6 +3,7 @@ package com.vardanian.movieapp.network;
 import android.net.Uri;
 import android.util.Log;
 
+import com.vardanian.movieapp.BuildConfig;
 import com.vardanian.movieapp.model.Movie;
 
 import org.json.JSONArray;
@@ -20,7 +21,7 @@ import java.util.List;
 public class MovieFetchr {
 
     private static final String TAG = "MovieFetchr";
-    private static final String API_KEY = "a9d3aada0aca0bb26c2f47c7e8207893";
+    private static final String API_KEY = BuildConfig.OPEN_TMDB_API_KEY;
     private static final String MOVIE_ID = "id";
     private static final String MOVIE_TITLE = "title";
     private static final String MOVIE_OVERVIEW = "overview";
@@ -57,7 +58,7 @@ public class MovieFetchr {
 
     public List<Movie> movieItems() {
 
-        List<Movie> items = new ArrayList<>();
+        List<Movie> movies = new ArrayList<>();
 
         try {
             String url = Uri.parse("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&")
@@ -68,13 +69,13 @@ public class MovieFetchr {
                     .build().toString();
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);
-            parseItems(items, jsonString);
+            parseItems(movies, jsonString);
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse JSON", je);
         } catch (IOException ioe) {
-            Log.e(TAG, "Failed to movie items", ioe);
+            Log.e(TAG, "Failed to movie movies", ioe);
         }
-        return items;
+        return movies;
     }
 
     private void parseItems(List<Movie> movies, String jsonObject) throws IOException, JSONException {

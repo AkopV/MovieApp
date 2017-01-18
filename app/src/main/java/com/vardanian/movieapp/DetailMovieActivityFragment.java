@@ -1,9 +1,5 @@
 package com.vardanian.movieapp;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Parcel;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,9 +10,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.vardanian.movieapp.model.Movie;
-import com.vardanian.movieapp.network.MovieFetchr;
-
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,11 +22,11 @@ public class DetailMovieActivityFragment extends Fragment {
 
 
     private Movie movie;
-    private ImageView poster;
-    private TextView title;
-    private TextView overview;
-    private TextView releaseDate;
-    private TextView popularity;
+    private ImageView ivPoster;
+    private TextView tvTitle;
+    private TextView tvOverview;
+    private TextView tvReleaseDate;
+    private TextView tvPopularity;
 
     public DetailMovieActivityFragment() {
     }
@@ -47,23 +40,23 @@ public class DetailMovieActivityFragment extends Fragment {
                 Movie.class.getName());
         getActivity().getIntent().getParcelableExtra(movie.getPosterPath());
 
-        poster = (ImageView) v.findViewById(R.id.detail_poster);
+        ivPoster = (ImageView) v.findViewById(R.id.detail_poster);
         Picasso.with(getActivity())
                 .load(movie.getPosterPath())
-                .placeholder(R.drawable.sw)
-                .into(poster);
+                .placeholder(R.drawable.ic_pictures_512)
+                .into(ivPoster);
 
-        title = (TextView) v.findViewById(R.id.detail_title);
-        title.setText(movie.getTitle());
+        tvTitle = (TextView) v.findViewById(R.id.detail_title);
+        tvTitle.setText(movie.getTitle());
 
-        overview = (TextView) v.findViewById(R.id.detail_overview);
-        overview.setText(OVERVIEW + movie.getOverview());
+        tvOverview = (TextView) v.findViewById(R.id.detail_overview);
+        tvOverview.setText(OVERVIEW + movie.getOverview());
 
-        releaseDate = (TextView) v.findViewById(R.id.detail_release_date);
-        releaseDate.setText(RELEASE_DATE + movie.getReleaseDate());
+        tvReleaseDate = (TextView) v.findViewById(R.id.detail_release_date);
+        tvReleaseDate.setText(RELEASE_DATE + movie.getReleaseDate());
 
-        popularity = (TextView) v.findViewById(R.id.detail_popularity);
-        popularity.setText(POPULARITY + movie.getPopularity());
+        tvPopularity = (TextView) v.findViewById(R.id.detail_popularity);
+        tvPopularity.setText(POPULARITY + movie.getPopularity());
 
         return v;
     }

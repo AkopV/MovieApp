@@ -29,7 +29,7 @@ public class MainActivityFragment extends Fragment {
     private static final String TAG = "MainActivityFragment";
 
     private RecyclerView rvMovie;
-    private List<Movie> movieItems = new ArrayList<>();
+    private List<Movie> movies = new ArrayList<>();
 
     public MainActivityFragment() {
     }
@@ -55,7 +55,7 @@ public class MainActivityFragment extends Fragment {
 
     private void setupAdapter() {
         if (isAdded()) {
-            rvMovie.setAdapter(new MovieAdapter(getContext(), movieItems));
+            rvMovie.setAdapter(new MovieAdapter(getContext(), movies));
         }
     }
 
@@ -77,7 +77,7 @@ public class MainActivityFragment extends Fragment {
             this.movie = movie;
             Picasso.with(getActivity())
                     .load(movie.getPosterPath())
-                    .placeholder(R.drawable.sw)
+                    .placeholder(R.drawable.ic_pictures_512)
                     .into(ivMovie);
         }
 
@@ -131,7 +131,7 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Movie> movies) {
-            movieItems = movies;
+            MainActivityFragment.this.movies = movies;
             setupAdapter();
         }
     }
