@@ -3,6 +3,7 @@ package com.vardanian.movieapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.vardanian.movieapp.db.dao.MoviesDAOImpl;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.network.MovieFetchr;
 
@@ -30,6 +32,7 @@ public class MainActivityFragment extends Fragment {
 
     private RecyclerView rvMovie;
     private List<Movie> movies = new ArrayList<>();
+    private MovieAdapter adapter;
 
     public MainActivityFragment() {
     }
@@ -50,13 +53,28 @@ public class MainActivityFragment extends Fragment {
         rvMovie.setLayoutManager(new GridLayoutManager(getActivity(),
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2));
         setupAdapter();
+
         return v;
     }
 
     private void setupAdapter() {
         if (isAdded()) {
-            rvMovie.setAdapter(new MovieAdapter(getContext(), movies));
+            adapter = new MovieAdapter(getContext(), movies);
+            rvMovie.setAdapter(adapter);
+        } else if (!isNetworkAvailable(getContext())) {
+            final MoviesDAOImpl db = new MoviesDAOImpl(getContext());
+            List<Movie> dbMovies = db.getAllMovies();
+            if (dbMovies != null) {
+                movies.addAll(dbMovies);
+                adapter.setMovies(movies);
+                adapter.notifyDataSetChanged();
+            }
         }
+    }
+
+    public boolean isNetworkAvailable(final Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -119,6 +137,11 @@ public class MainActivityFragment extends Fragment {
         @Override
         public int getItemCount() {
             return movies.size();
+        }
+
+        // set movies in db
+        public void setMovies(List<Movie> movies) {
+            this.movies = movies;
         }
     }
 
