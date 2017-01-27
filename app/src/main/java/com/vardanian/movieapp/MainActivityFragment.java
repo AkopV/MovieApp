@@ -20,6 +20,8 @@ import com.vardanian.movieapp.db.dao.MoviesDAOImpl;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.network.MovieFetchr;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,25 @@ public class MainActivityFragment extends Fragment {
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2));
         setupAdapter();
 
+        final MoviesDAOImpl db = new MoviesDAOImpl(getContext());
+        if (!isNetworkAvailable(getContext())) {
+            List<Movie> dbMovies = db.getAllMovies();
+            if (dbMovies != null) {
+                movies.addAll(dbMovies);
+                adapter.setMovies(movies);
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            MovieFetchr movieFetchr = new MovieFetchr();
+            try {
+                List<Movie> fetchedMovies = movieFetchr.movieItems();
+                movies.addAll(fetchedMovies);
+                db.saveAllMovies(movies);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            adapter.notifyDataSetChanged();
+        }
         return v;
     }
 
@@ -61,14 +82,6 @@ public class MainActivityFragment extends Fragment {
         if (isAdded()) {
             adapter = new MovieAdapter(getContext(), movies);
             rvMovie.setAdapter(adapter);
-        } else if (!isNetworkAvailable(getContext())) {
-            final MoviesDAOImpl db = new MoviesDAOImpl(getContext());
-            List<Movie> dbMovies = db.getAllMovies();
-            if (dbMovies != null) {
-                movies.addAll(dbMovies);
-                adapter.setMovies(movies);
-                adapter.notifyDataSetChanged();
-            }
         }
     }
 
