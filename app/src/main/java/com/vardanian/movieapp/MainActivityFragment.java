@@ -20,8 +20,6 @@ import com.vardanian.movieapp.db.dao.MoviesDAOImpl;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.network.MovieFetchr;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +30,10 @@ public class MainActivityFragment extends Fragment {
 
     private static final String TAG = "MainActivityFragment";
 
-    private RecyclerView rvMovie;
-    private List<Movie> movies = new ArrayList<>();
+    private RecyclerView rvMovies;
+    private List<Movie> movies;
     private MovieAdapter adapter;
+    private MoviesDAOImpl db;
 
     public MainActivityFragment() {
     }
@@ -43,7 +42,7 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new MovieItemTask().execute();
+
         Log.i(TAG, "Background thread start");
     }
 
@@ -51,76 +50,35 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        rvMovie = (RecyclerView) v.findViewById(R.id.rv_movies);
-        rvMovie.setLayoutManager(new GridLayoutManager(getActivity(),
+        rvMovies = (RecyclerView) v.findViewById(R.id.rv_movies);
+        rvMovies.setLayoutManager(new GridLayoutManager(getActivity(),
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2));
         setupAdapter();
 
-        final MoviesDAOImpl db = new MoviesDAOImpl(getContext());
+        db = new MoviesDAOImpl(getContext());
         if (!isNetworkAvailable(getContext())) {
             List<Movie> dbMovies = db.getAllMovies();
             if (dbMovies != null) {
                 movies.addAll(dbMovies);
-                adapter.setMovies(movies);
                 adapter.notifyDataSetChanged();
             }
-        } else {
-            MovieFetchr movieFetchr = new MovieFetchr();
-            try {
-                List<Movie> fetchedMovies = movieFetchr.movieItems();
-                movies.addAll(fetchedMovies);
-                db.saveAllMovies(movies);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            adapter.notifyDataSetChanged();
-        }
+        } else new MovieItemTask().execute();
+
         return v;
     }
 
     private void setupAdapter() {
-        if (isAdded()) {
-            adapter = new MovieAdapter(getContext(), movies);
-            rvMovie.setAdapter(adapter);
-        }
+        movies = new ArrayList<>();
+        adapter = new MovieAdapter(getContext(), movies);
+        rvMovies.setAdapter(adapter);
     }
 
     public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
-    private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private ImageView ivMovie;
-        private Movie movie;
-        private Context context;
-
-        public MovieHolder(View itemView) {
-            super(itemView);
-            movie = new Movie();
-            ivMovie = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
-            context = itemView.getContext();
-            itemView.setOnClickListener(this);
-        }
-
-        public void bindMovieItem(Movie movie) {
-            this.movie = movie;
-            Picasso.with(getActivity())
-                    .load(movie.getPosterPath())
-                    .placeholder(R.drawable.ic_pictures_512)
-                    .into(ivMovie);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), DetailMovieActivity.class);
-            intent.putExtra(Movie.class.getName(), movie);
-            v.getContext().startActivity(intent);
-        }
-    }
-
-    private class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
+    private class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
 
         private List<Movie> movies;
         private Context context;
@@ -152,9 +110,34 @@ public class MainActivityFragment extends Fragment {
             return movies.size();
         }
 
-        // set movies in db
-        public void setMovies(List<Movie> movies) {
-            this.movies = movies;
+        class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            private ImageView ivMovie;
+            private Movie movie;
+            private Context context;
+
+            public MovieHolder(View itemView) {
+                super(itemView);
+                movie = new Movie();
+                ivMovie = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
+                context = itemView.getContext();
+                itemView.setOnClickListener(this);
+            }
+
+            public void bindMovieItem(Movie movie) {
+                this.movie = movie;
+                Picasso.with(getActivity())
+                        .load(movie.getPosterPath())
+                        .placeholder(R.drawable.ic_pictures_512)
+                        .into(ivMovie);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DetailMovieActivity.class);
+                intent.putExtra(Movie.class.getName(), movie);
+                v.getContext().startActivity(intent);
+            }
         }
     }
 
@@ -167,8 +150,14 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Movie> movies) {
-            MainActivityFragment.this.movies = movies;
-            setupAdapter();
+            MainActivityFragment.this.movies.addAll(movies);
+            adapter.notifyDataSetChanged();
+
+            try {
+                db.saveAllMovies(movies);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
