@@ -25,7 +25,7 @@ public class MoviesDAOImpl implements MoviesDAO {
 
     public MoviesDAOImpl(Context context) {
         this.context = context.getApplicationContext();
-        db = new MovieOpenHelper(this.context).getWritableDatabase();
+        dbHelper = new MovieOpenHelper(context);
     }
 
     private static ContentValues getContentValues(Movie movie) {
@@ -85,6 +85,7 @@ public class MoviesDAOImpl implements MoviesDAO {
 
     @Override
     public List<Movie> getAllMovies() {
+        db = dbHelper.getWritableDatabase();
         List<Movie> movies = new ArrayList<>();
         MovieCursorWrapper cursor = queryCrimes(null, null);
 
@@ -92,7 +93,6 @@ public class MoviesDAOImpl implements MoviesDAO {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 movies.add(cursor.getMovie());
-                Log.i(TAG, "Add movie " + movies.get(cursor.getColumnIndex("id")));
                 cursor.moveToNext();
             }
         } finally {
