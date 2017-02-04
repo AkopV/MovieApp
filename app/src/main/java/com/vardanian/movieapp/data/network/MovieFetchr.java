@@ -1,9 +1,10 @@
-package com.vardanian.movieapp.network;
+package com.vardanian.movieapp.data.network;
 
 import android.net.Uri;
 import android.util.Log;
 
 import com.vardanian.movieapp.BuildConfig;
+import com.vardanian.movieapp.interfaces.Constants;
 import com.vardanian.movieapp.model.Movie;
 
 import org.json.JSONArray;
@@ -29,7 +30,7 @@ public class MovieFetchr {
     private static final String MOVIE_POPULARITY = "popularity";
     private static final String MOVIE_POSTER_PATH = "poster_path";
 
-    public byte[] getUrlBytes(String urlSpec) throws IOException {
+    public static byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try {
@@ -52,11 +53,11 @@ public class MovieFetchr {
         }
     }
 
-    public String getUrlString(String urlSpec) throws IOException {
+    public static String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public List<Movie> movieItems() {
+    public static List<Movie> movieItems() {
 
         List<Movie> movies = new ArrayList<>();
 
@@ -69,7 +70,7 @@ public class MovieFetchr {
                     .build().toString();
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);
-            parseItems(movies, jsonString);
+            parseItems(jsonString);
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse JSON", je);
         } catch (IOException ioe) {
@@ -78,12 +79,14 @@ public class MovieFetchr {
         return movies;
     }
 
-    private void parseItems(List<Movie> movies, String jsonObject) throws IOException, JSONException {
+    public static List<Movie> parseItems(String jsonObject) throws IOException, JSONException {
 
         JSONObject moviesJsonObject = new JSONObject(jsonObject);
         JSONArray movieJsonArray = moviesJsonObject.getJSONArray("results");
 
-        for (int i = 0; i < movieJsonArray.length(); i++) {
+        List<Movie> movies = new ArrayList<>(Constants.MOVIE_COUNT);
+        int length = movieJsonArray.length() < Constants.MOVIE_COUNT ? movieJsonArray.length() : Constants.MOVIE_COUNT;
+        for (int i = 0; i < Constants.MOVIE_COUNT; i++) {
             JSONObject movieJsonObject = movieJsonArray.getJSONObject(i);
             Movie movie = new Movie();
             movie.setId(movieJsonObject.getString(MOVIE_ID));
@@ -95,5 +98,6 @@ public class MovieFetchr {
 
             movies.add(movie);
         }
+        return movies;
     }
 }

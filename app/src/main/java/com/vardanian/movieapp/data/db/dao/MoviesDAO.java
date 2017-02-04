@@ -1,4 +1,4 @@
-package com.vardanian.movieapp.db.dao;
+package com.vardanian.movieapp.data.db.dao;
 
 import com.vardanian.movieapp.model.Movie;
 

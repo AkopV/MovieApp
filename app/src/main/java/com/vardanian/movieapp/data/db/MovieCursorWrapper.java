@@ -1,13 +1,11 @@
-package com.vardanian.movieapp.db;
+package com.vardanian.movieapp.data.db;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import com.vardanian.movieapp.model.Movie;
 
-import java.util.UUID;
-
-import static com.vardanian.movieapp.db.MovieDbSchema.*;
+import static com.vardanian.movieapp.data.db.MovieDbSchema.*;
 
 public class MovieCursorWrapper extends CursorWrapper {
     /**

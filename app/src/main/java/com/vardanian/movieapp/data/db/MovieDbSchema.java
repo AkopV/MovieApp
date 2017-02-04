@@ -1,4 +1,4 @@
-package com.vardanian.movieapp.db;
+package com.vardanian.movieapp.data.db;
 
 public class MovieDbSchema {
 

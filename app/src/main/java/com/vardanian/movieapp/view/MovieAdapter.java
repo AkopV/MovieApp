@@ -1,20 +1,24 @@
-package com.vardanian.movieapp;
+package com.vardanian.movieapp.view;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.vardanian.movieapp.R;
 import com.vardanian.movieapp.model.Movie;
+import com.vardanian.movieapp.view.detailMovie.DetailMovieActivity;
 
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
 
+    private static final String TAG = "MovieAdapter";
     private List<Movie> movies;
     private Context context;
 
@@ -24,7 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     }
 
     @Override
-    public MovieHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public MovieAdapter.MovieHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.movie_item, viewGroup, false);
         return new MovieHolder(view);
@@ -59,12 +63,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             itemView.setOnClickListener(this);
         }
 
-        public void bindMovieItem(Movie movie) {
+        public void bindMovieItem(final Movie movie) {
             this.movie = movie;
-            Picasso.with(context)
-                    .load(movie.getPosterPath())
-                    .placeholder(R.drawable.ic_pictures_512)
-                    .into(ivMovie);
+
+            if (!TextUtils.isEmpty(movie.getPosterPath(Movie.WIDTH_500)))
+                Picasso.with(context)
+                        .load(movie.getPosterPath(Movie.WIDTH_500))
+                        .placeholder(R.drawable.ic_pictures_512)
+                        .into(ivMovie);
         }
 
         @Override

@@ -1,12 +1,10 @@
-package com.vardanian.movieapp.db;
+package com.vardanian.movieapp.data.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.vardanian.movieapp.model.Movie;
-
-import static com.vardanian.movieapp.db.MovieDbSchema.MovieTable;
+import static com.vardanian.movieapp.data.db.MovieDbSchema.MovieTable;
 
 public class MovieOpenHelper extends SQLiteOpenHelper {
 
