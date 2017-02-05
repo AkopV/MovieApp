@@ -2,6 +2,7 @@ package com.vardanian.movieapp.view.detailMovie;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
     private TextView tvReleaseDate;
     private TextView tvPopularity;
     private TextView tvVoteAverage;
+    private Toolbar toolbar;
 
     DetailMoviePresenter presenter;
 
@@ -62,6 +64,7 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
         tvReleaseDate = (TextView) v.findViewById(R.id.detail_release_date);
         tvPopularity = (TextView) v.findViewById(R.id.detail_popularity);
         tvVoteAverage = (TextView) v.findViewById(R.id.detail_vote_average);
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
     }
 
     public void updateUI(Movie movie) {
@@ -78,7 +81,7 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
         tvReleaseDate.setText(MOVIE_RELEASE_DATE + movie.getReleaseDate());
         tvPopularity.setText(MOVIE_POPULARITY + movie.getPopularity().substring(0, 6));
         tvVoteAverage.setText(MOVIE_VOTE_AVERAGE + movie.getVoteAverage());
-
+        toolbar.setTitle(movie.getTitle());
     }
 
     @Override
