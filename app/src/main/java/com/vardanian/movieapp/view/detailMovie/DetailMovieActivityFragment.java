@@ -1,6 +1,5 @@
 package com.vardanian.movieapp.view.detailMovie;
 
-import android.media.tv.TvTrackInfo;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,12 +17,18 @@ import com.vardanian.movieapp.presenter.DetailMoviePresenter;
 
 public class DetailMovieActivityFragment extends Fragment implements MVPMovies.DetailMovieView{
 
-    private Movie movie;
+    private static final String MOVIE_RELEASE_DATE = "Release date:\n";
+    private static final String MOVIE_POPULARITY = "Popularity:\n";
+    private static final String MOVIE_VOTE_AVERAGE = "Vote average:\n";
+
     private ImageView ivPoster;
+    private ImageView ivBackdrop;
     private TextView tvTitle;
     private TextView tvOverview;
     private TextView tvReleaseDate;
     private TextView tvPopularity;
+    private TextView tvVoteAverage;
+
     DetailMoviePresenter presenter;
 
     public DetailMovieActivityFragment() {
@@ -49,12 +54,14 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
         presenter.loadData(getActivity().getIntent());
     }
 
-    private void initUI(View v) { 
+    private void initUI(View v) { //butterknife
         ivPoster = (ImageView) v.findViewById(R.id.detail_poster);
+        ivBackdrop = (ImageView) v.findViewById(R.id.detail_backdrop);
         tvTitle = (TextView) v.findViewById(R.id.detail_title);
         tvOverview = (TextView) v.findViewById(R.id.detail_overview);
         tvReleaseDate = (TextView) v.findViewById(R.id.detail_release_date);
         tvPopularity = (TextView) v.findViewById(R.id.detail_popularity);
+        tvVoteAverage = (TextView) v.findViewById(R.id.detail_vote_average);
     }
 
     public void updateUI(Movie movie) {
@@ -62,10 +69,16 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
                 .load(movie.getPosterPath(Movie.WIDTH_500))
                 .placeholder(R.drawable.ic_pictures_512)
                 .into(ivPoster);
+        Picasso.with(getActivity())
+                .load(movie.getBackdropPath(Movie.WIDTH_500))
+                .placeholder(R.drawable.ic_pictures_512)
+                .into(ivBackdrop);
         tvTitle.setText(movie.getTitle());
-        tvOverview.setText(R.string.overview + movie.getOverview());
-        tvReleaseDate.setText(R.string.release_date + movie.getReleaseDate());
-        tvPopularity.setText(R.string.popularity + movie.getPopularity());
+        tvOverview.setText(movie.getOverview());
+        tvReleaseDate.setText(MOVIE_RELEASE_DATE + movie.getReleaseDate());
+        tvPopularity.setText(MOVIE_POPULARITY + movie.getPopularity().substring(0, 6));
+        tvVoteAverage.setText(MOVIE_VOTE_AVERAGE + movie.getVoteAverage());
+
     }
 
     @Override

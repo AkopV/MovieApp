@@ -29,6 +29,9 @@ public class MovieFetchr {
     private static final String MOVIE_RELEASE_DATE = "release_date";
     private static final String MOVIE_POPULARITY = "popularity";
     private static final String MOVIE_POSTER_PATH = "poster_path";
+    private static final String MOVIE_BACKDROP_PATH = "backdrop_path";
+    private static final String MOVIE_VOTE_AVERAGE = "vote_average";
+
 
     public static byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -95,6 +98,8 @@ public class MovieFetchr {
             movie.setReleaseDate(movieJsonObject.getString(MOVIE_RELEASE_DATE));
             movie.setPopularity(movieJsonObject.getString(MOVIE_POPULARITY));
             movie.setPosterPath(movieJsonObject.getString(MOVIE_POSTER_PATH));
+            movie.setBackdropPath(movieJsonObject.getString(MOVIE_BACKDROP_PATH));
+            movie.setVoteAverage(movieJsonObject.getString(MOVIE_VOTE_AVERAGE));
 
             movies.add(movie);
         }

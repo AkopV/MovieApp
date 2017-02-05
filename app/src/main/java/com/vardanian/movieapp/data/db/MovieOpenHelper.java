@@ -24,7 +24,9 @@ public class MovieOpenHelper extends SQLiteOpenHelper {
                 MovieTable.Cols.MOVIE_OVERVIEW + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_RELEASE_DATE + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_POPULARITY + " TEXT NOT NULL, " +
-                MovieTable.Cols.MOVIE_POSTER_PATH + " TEXT NOT NULL "
+                MovieTable.Cols.MOVIE_POSTER_PATH + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_VOTE_AVERAGE + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_BACKDROP_PATH + " TEXT NOT NULL "
                 + ") "
         );
     }

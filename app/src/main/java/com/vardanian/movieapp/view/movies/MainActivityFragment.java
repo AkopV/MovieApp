@@ -20,9 +20,6 @@ import com.vardanian.movieapp.view.MovieAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment implements MVPMovies.MoviesView {
 
     private static final String TAG = "MainActivityFragment";

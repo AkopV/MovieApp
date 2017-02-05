@@ -6,5 +6,7 @@
     <string name="overview">OVERVIEW: </string>
     <string name="release_date">RELEASE DATE: </string>
     <string name="popularity">POPULARITY: </string>
+    <string name="transition_card">card</string>
+    <string name="movie_item_description">Movie Poster Image</string>
 
 </resources>

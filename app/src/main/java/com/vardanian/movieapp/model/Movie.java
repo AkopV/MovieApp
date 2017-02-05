@@ -16,8 +16,10 @@ public class Movie implements Parcelable {
     private static final String URL_IMAGE_TMDB_DEFAULT = "http://image.tmdb.org/t/p/";
     public static final String KEY_TITLE = "original_title";
     public static final String KEY_POSTER_PATH = "poster_path";
+    public static final String KEY_BACKDROP_PATH = "backdrop_path";
     public static final String KEY_OVERVIEW = "overview";
     public static final String KEY_RATE = "vote_average";
+    public static final String KEY_POPULARITY = "popularity";
     public static final String KEY_RELEASE_DATE = "release_date";
     public static final String KEY_ID = "id";
     public static final String TABLE_MOVIE = "movies";
@@ -27,6 +29,9 @@ public class Movie implements Parcelable {
             KEY_TITLE,
             KEY_OVERVIEW,
             KEY_POSTER_PATH,
+            KEY_BACKDROP_PATH,
+            KEY_RELEASE_DATE,
+            KEY_POPULARITY,
             KEY_RATE
     };
 
@@ -36,16 +41,21 @@ public class Movie implements Parcelable {
     public String releaseDate;
     public String popularity;
     public String posterPath;
+    public String backdropPath;
+    public String voteAverage;
 
     public Movie(){}
 
-    public Movie(String id, String title, String overview, String releaseDate, String popularity, String posterPath) {
+    public Movie(String id, String title, String overview, String releaseDate, String popularity, String posterPath,
+                 String voteAverage, String backdropPath) {
         this.id = id;
         this.title = title;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.popularity = popularity;
         this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.voteAverage = voteAverage;
     }
 
     public static Movie getItemFromCursor(Cursor c) {
@@ -54,7 +64,9 @@ public class Movie implements Parcelable {
         item.title = c.getString(c.getColumnIndex(Movie.KEY_TITLE));
         item.overview = c.getString(c.getColumnIndex(Movie.KEY_OVERVIEW));
         item.posterPath = c.getString(c.getColumnIndex(Movie.KEY_POSTER_PATH));
-        item.popularity = c.getString(c.getColumnIndex(Movie.KEY_RATE));
+        item.popularity = c.getString(c.getColumnIndex(Movie.KEY_POPULARITY));
+        item.backdropPath = c.getString(c.getColumnIndex(Movie.KEY_BACKDROP_PATH));
+        item.voteAverage = c.getString(c.getColumnIndex(Movie.KEY_RATE));
 
         return item;
     }
@@ -65,6 +77,8 @@ public class Movie implements Parcelable {
         releaseDate = in.readString();
         popularity = in.readString();
         posterPath = in.readString();
+        backdropPath = in.readString();
+        voteAverage = in.readString();
     }
 
     public String getId() {
@@ -107,6 +121,14 @@ public class Movie implements Parcelable {
         this.popularity = popularity;
     }
 
+    public String getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(String voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
     public String getPosterPath(String preferedWidth) {
         StringBuilder sb = new StringBuilder();
         sb.append(URL_IMAGE_TMDB_DEFAULT);
@@ -118,6 +140,18 @@ public class Movie implements Parcelable {
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
+    }
+
+    public String getBackdropPath(String preferedWidth) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(URL_IMAGE_TMDB_DEFAULT);
+        sb.append(preferedWidth);
+        sb.append(backdropPath);
+        return sb.toString();
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
     @Override
@@ -138,6 +172,8 @@ public class Movie implements Parcelable {
         dest.writeString(releaseDate);
         dest.writeString(popularity);
         dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeString(voteAverage);
     }
 
     @SuppressWarnings("unused")

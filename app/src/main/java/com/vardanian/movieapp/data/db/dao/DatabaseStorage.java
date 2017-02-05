@@ -37,6 +37,8 @@ public class DatabaseStorage implements MoviesDAO {
         values.put(Cols.MOVIE_RELEASE_DATE, movie.getReleaseDate());
         values.put(Cols.MOVIE_POPULARITY, movie.getPopularity());
         values.put(Cols.MOVIE_POSTER_PATH, movie.posterPath);
+        values.put(Cols.MOVIE_BACKDROP_PATH, movie.backdropPath);
+        values.put(Cols.MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
 
         return values;
     }

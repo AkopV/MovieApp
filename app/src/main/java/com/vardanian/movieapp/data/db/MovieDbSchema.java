@@ -12,6 +12,8 @@ public class MovieDbSchema {
             public static final String MOVIE_RELEASE_DATE = "release_date";
             public static final String MOVIE_POPULARITY = "popularity";
             public static final String MOVIE_POSTER_PATH = "poster_path";
+            public static final String MOVIE_BACKDROP_PATH = "backdrop_path";
+            public static final String MOVIE_VOTE_AVERAGE = "vote_average";
         }
     }
 }
