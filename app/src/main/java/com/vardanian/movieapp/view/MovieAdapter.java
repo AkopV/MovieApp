@@ -16,6 +16,10 @@ import com.vardanian.movieapp.view.detailMovie.DetailMovieActivity;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
 
     private static final String TAG = "MovieAdapter";
@@ -51,14 +55,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView ivMovie;
+        @BindView(R.id.fragment_movie_image_view)
+        ImageView ivMovie;
         private Movie movie;
         private Context context;
 
         public MovieHolder(View itemView) {
             super(itemView);
             movie = new Movie();
-            ivMovie = (ImageView) itemView.findViewById(R.id.fragment_movie_image_view);
+            ButterKnife.bind(this, itemView);
             context = itemView.getContext();
             itemView.setOnClickListener(this);
         }

@@ -16,20 +16,31 @@ import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.presenter.DetailMoviePresenter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailMovieActivityFragment extends Fragment implements MVPMovies.DetailMovieView{
 
     private static final String MOVIE_RELEASE_DATE = "Release date:\n";
     private static final String MOVIE_POPULARITY = "Popularity:\n";
     private static final String MOVIE_VOTE_AVERAGE = "Vote average:\n";
 
-    private ImageView ivPoster;
-    private ImageView ivBackdrop;
-    private TextView tvTitle;
-    private TextView tvOverview;
-    private TextView tvReleaseDate;
-    private TextView tvPopularity;
-    private TextView tvVoteAverage;
-    private Toolbar toolbar;
+    @BindView(R.id.detail_poster)
+    ImageView ivPoster;
+    @BindView(R.id.detail_backdrop)
+    ImageView ivBackdrop;
+    @BindView(R.id.detail_title)
+    TextView tvTitle;
+    @BindView(R.id.detail_overview)
+    TextView tvOverview;
+    @BindView(R.id.detail_release_date)
+    TextView tvReleaseDate;
+    @BindView(R.id.detail_popularity)
+    TextView tvPopularity;
+    @BindView(R.id.detail_vote_average)
+    TextView tvVoteAverage;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     DetailMoviePresenter presenter;
 
@@ -41,9 +52,9 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detail_movie, container, false);
 
-        presenter = new DetailMoviePresenter(getContext());
+        ButterKnife.bind(this, v);
 
-        initUI(v);
+        presenter = new DetailMoviePresenter(getContext());
 
         return v;
     }
@@ -54,17 +65,6 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
 
         presenter.setView(this);
         presenter.loadData(getActivity().getIntent());
-    }
-
-    private void initUI(View v) { //butterknife
-        ivPoster = (ImageView) v.findViewById(R.id.detail_poster);
-        ivBackdrop = (ImageView) v.findViewById(R.id.detail_backdrop);
-        tvTitle = (TextView) v.findViewById(R.id.detail_title);
-        tvOverview = (TextView) v.findViewById(R.id.detail_overview);
-        tvReleaseDate = (TextView) v.findViewById(R.id.detail_release_date);
-        tvPopularity = (TextView) v.findViewById(R.id.detail_popularity);
-        tvVoteAverage = (TextView) v.findViewById(R.id.detail_vote_average);
-        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
     }
 
     public void updateUI(Movie movie) {

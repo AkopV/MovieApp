@@ -20,11 +20,15 @@ import com.vardanian.movieapp.view.MovieAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivityFragment extends Fragment implements MVPMovies.MoviesView {
 
     private static final String TAG = "MainActivityFragment";
 
-    private RecyclerView rvMovies;
+    @BindView(R.id.rv_movies)
+    RecyclerView rvMovies;
     private List<Movie> movies;
     private MovieAdapter adapter;
 
@@ -34,17 +38,12 @@ public class MainActivityFragment extends Fragment implements MVPMovies.MoviesVi
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-
-        Log.i(TAG, "Background thread start");
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
+
+        ButterKnife.bind(this, v);
+
         initUI(v);
         presenter = new MoviesPresenter(getContext());
 
@@ -61,7 +60,6 @@ public class MainActivityFragment extends Fragment implements MVPMovies.MoviesVi
 
     private void initUI(View root) {
         movies = new ArrayList<>();
-        rvMovies = (RecyclerView) root.findViewById(R.id.rv_movies);
         rvMovies.setLayoutManager(new GridLayoutManager(getActivity(),
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2));
         setupAdapter();
