@@ -3,6 +3,7 @@ package com.vardanian.movieapp.data.network;
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.vardanian.movieapp.BuildConfig;
 import com.vardanian.movieapp.interfaces.Constants;
 import com.vardanian.movieapp.model.Movie;
@@ -86,21 +87,13 @@ public class MovieFetchr {
 
         JSONObject moviesJsonObject = new JSONObject(jsonObject);
         JSONArray movieJsonArray = moviesJsonObject.getJSONArray("results");
-
         List<Movie> movies = new ArrayList<>(Constants.MOVIE_COUNT);
+        // Implement Gson
+        Gson gson = new Gson();
         int length = movieJsonArray.length() < Constants.MOVIE_COUNT ? movieJsonArray.length() : Constants.MOVIE_COUNT;
         for (int i = 0; i < Constants.MOVIE_COUNT; i++) {
             JSONObject movieJsonObject = movieJsonArray.getJSONObject(i);
-            Movie movie = new Movie();
-            movie.setId(movieJsonObject.getString(MOVIE_ID));
-            movie.setTitle(movieJsonObject.getString(MOVIE_TITLE));
-            movie.setOverview(movieJsonObject.getString(MOVIE_OVERVIEW));
-            movie.setReleaseDate(movieJsonObject.getString(MOVIE_RELEASE_DATE));
-            movie.setPopularity(movieJsonObject.getString(MOVIE_POPULARITY));
-            movie.setPosterPath(movieJsonObject.getString(MOVIE_POSTER_PATH));
-            movie.setBackdropPath(movieJsonObject.getString(MOVIE_BACKDROP_PATH));
-            movie.setVoteAverage(movieJsonObject.getString(MOVIE_VOTE_AVERAGE));
-
+            Movie movie = gson.fromJson(movieJsonObject.toString(), Movie.class);
             movies.add(movie);
         }
         return movies;

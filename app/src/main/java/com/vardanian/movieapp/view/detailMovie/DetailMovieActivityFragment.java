@@ -21,10 +21,6 @@ import butterknife.ButterKnife;
 
 public class DetailMovieActivityFragment extends Fragment implements MVPMovies.DetailMovieView{
 
-    private static final String MOVIE_RELEASE_DATE = "Release date:\n";
-    private static final String MOVIE_POPULARITY = "Popularity:\n";
-    private static final String MOVIE_VOTE_AVERAGE = "Vote average:\n";
-
     @BindView(R.id.detail_poster)
     ImageView ivPoster;
     @BindView(R.id.detail_backdrop)
@@ -78,9 +74,9 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
                 .into(ivBackdrop);
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
-        tvReleaseDate.setText(MOVIE_RELEASE_DATE + movie.getReleaseDate());
-        tvPopularity.setText(MOVIE_POPULARITY + movie.getPopularity().substring(0, 6));
-        tvVoteAverage.setText(MOVIE_VOTE_AVERAGE + movie.getVoteAverage());
+        tvReleaseDate.setText(getString(R.string.release_date) + movie.getReleaseDate());
+        tvPopularity.setText(getString(R.string.popularity) + movie.getPopularity().substring(0, 6));
+        tvVoteAverage.setText(getString(R.string.vote_average) + movie.getVoteAverage());
         toolbar.setTitle(movie.getTitle());
     }
 

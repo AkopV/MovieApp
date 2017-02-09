@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Movie implements Parcelable {
 
     // keys for packing/unpacking intent
@@ -13,7 +15,7 @@ public class Movie implements Parcelable {
     public static final String WIDTH_500 = "w500";
     public static final String WIDTH_780 = "w780";
 
-    private static final String URL_IMAGE_TMDB_DEFAULT = "http://image.tmdb.org/t/p/";
+    public static final String URL_IMAGE_TMDB_DEFAULT = "http://image.tmdb.org/t/p/";
     public static final String KEY_TITLE = "original_title";
     public static final String KEY_POSTER_PATH = "poster_path";
     public static final String KEY_BACKDROP_PATH = "backdrop_path";
@@ -35,13 +37,21 @@ public class Movie implements Parcelable {
             KEY_RATE
     };
 
+    @SerializedName(KEY_ID)
     public String id;
+    @SerializedName(KEY_TITLE)
     public String title;
+    @SerializedName(KEY_OVERVIEW)
     public String overview;
+    @SerializedName(KEY_RELEASE_DATE)
     public String releaseDate;
+    @SerializedName(KEY_POPULARITY)
     public String popularity;
+    @SerializedName(KEY_POSTER_PATH)
     public String posterPath;
+    @SerializedName(KEY_BACKDROP_PATH)
     public String backdropPath;
+    @SerializedName(KEY_RATE)
     public String voteAverage;
 
     public Movie(){}
