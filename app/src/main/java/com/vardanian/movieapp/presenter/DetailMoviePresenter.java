@@ -12,8 +12,8 @@ public class DetailMoviePresenter implements MVPMovies.DetailMoviePresenter {
     private MVPMovies.DetailMovieView view;
     private final MVPMovies.MoviesModel model;
 
-    public DetailMoviePresenter(Context context) {
-        model = new DataRepository(context);
+    public DetailMoviePresenter(DataRepository dataRepository) {
+        this.model = dataRepository;
     }
 
     @Override

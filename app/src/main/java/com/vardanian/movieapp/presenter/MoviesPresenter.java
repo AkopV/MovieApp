@@ -14,8 +14,8 @@ public class MoviesPresenter implements MVPMovies.MoviesPresenter {
     private MVPMovies.MoviesView view;
     private final MVPMovies.MoviesModel model;
 
-    public MoviesPresenter(Context context) {
-        model = new DataRepository(context);
+    public MoviesPresenter(DataRepository dataRepository) {
+        this.model = dataRepository;
     }
 
     @Override

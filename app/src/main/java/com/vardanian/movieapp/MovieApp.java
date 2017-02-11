@@ -20,4 +20,8 @@ public class MovieApp extends Application{
                 .applicationModule(new ApplicationModule(this))
                 .build();
     }
+
+    public ApplicationComponent getComponent() {
+        return component;
+    }
 }

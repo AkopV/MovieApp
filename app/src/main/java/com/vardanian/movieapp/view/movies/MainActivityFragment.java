@@ -2,23 +2,25 @@ package com.vardanian.movieapp.view.movies;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.vardanian.movieapp.MovieApp;
 import com.vardanian.movieapp.R;
 import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.model.Movie;
-import com.vardanian.movieapp.presenter.MoviesPresenter;
 import com.vardanian.movieapp.view.MovieAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,9 +34,20 @@ public class MainActivityFragment extends Fragment implements MVPMovies.MoviesVi
     private List<Movie> movies;
     private MovieAdapter adapter;
 
-    private MVPMovies.MoviesPresenter presenter;
+    @Inject
+    public MVPMovies.MoviesPresenter presenter;
 
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.initialize();
+    }
+
+    private void initialize() {
+        ((MovieApp) (getActivity()).getApplication()).getComponent().inject(this);
     }
 
     @Override
@@ -45,7 +58,6 @@ public class MainActivityFragment extends Fragment implements MVPMovies.MoviesVi
         ButterKnife.bind(this, v);
 
         initUI(v);
-        presenter = new MoviesPresenter(getContext());
 
         return v;
     }

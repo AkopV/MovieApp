@@ -1,5 +1,6 @@
 package com.vardanian.movieapp.view.detailMovie;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,10 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.vardanian.movieapp.MovieApp;
 import com.vardanian.movieapp.R;
 import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.model.Movie;
 import com.vardanian.movieapp.presenter.DetailMoviePresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,9 +42,20 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    DetailMoviePresenter presenter;
+    @Inject
+    public MVPMovies.DetailMoviePresenter presenter;
 
     public DetailMovieActivityFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.initialize();
+    }
+
+    private void initialize() {
+        ((MovieApp) (getActivity()).getApplication()).getComponent().inject(this);
     }
 
     @Override
@@ -49,8 +64,6 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
         View v = inflater.inflate(R.layout.fragment_detail_movie, container, false);
 
         ButterKnife.bind(this, v);
-
-        presenter = new DetailMoviePresenter(getContext());
 
         return v;
     }
