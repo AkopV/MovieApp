@@ -1,13 +1,14 @@
 package com.vardanian.movieapp.presenter;
 
-import android.content.Context;
-
 import com.vardanian.movieapp.data.DataRepository;
-import com.vardanian.movieapp.interfaces.IListener;
 import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.model.Movie;
 
 import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MoviesPresenter implements MVPMovies.MoviesPresenter {
 
@@ -25,25 +26,50 @@ public class MoviesPresenter implements MVPMovies.MoviesPresenter {
 
     @Override
     public void getMovies() {
-        model.fetchMovies(new IListener() {
-            @Override
-            public void onResult(List<Movie> movies) {
-                if (MoviesPresenter.this.view != null){
-                    MoviesPresenter.this.view.onMoviesReceived(movies);
-                }
-            }
+        showProgress();
+        model.fetchMovies()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Movie>>() {
+                    @Override
+                    public void onCompleted() {
+                        hideProgress();
+                    }
 
-            @Override
-            public void onError(Exception e) {
-                if (MoviesPresenter.this.view != null) {
-                    MoviesPresenter.this.view.onError(e.getLocalizedMessage());
-                }
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        MoviesPresenter.this.onError((Exception) e);
+                    }
+
+                    @Override
+                    public void onNext(List<Movie> movies) {
+                        MoviesPresenter.this.updateUIWithResults(movies);
+                    }
+                });
+    }
+
+    private void showProgress() {
+
+    }
+
+    private void hideProgress() {
+
+    }
+
+    private void updateUIWithResults(List<Movie> movies) {
+        if (MoviesPresenter.this.view != null) {
+            MoviesPresenter.this.view.onMoviesReceived(movies);
+        }
+    }
+
+    private void onError(Exception e) {
+        if (MoviesPresenter.this.view != null) {
+            MoviesPresenter.this.view.onError(e.getLocalizedMessage());
+        }
     }
 
     @Override
     public void onMovieSelected(int id) {
-
+        throw new UnsupportedOperationException();
     }
 }

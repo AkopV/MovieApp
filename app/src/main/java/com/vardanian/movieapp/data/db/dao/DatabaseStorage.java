@@ -7,11 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vardanian.movieapp.data.db.MovieCursorWrapper;
+import com.vardanian.movieapp.data.db.MovieDbSchema;
 import com.vardanian.movieapp.data.db.MovieOpenHelper;
+import com.vardanian.movieapp.exceptions.CursorIsNullException;
 import com.vardanian.movieapp.model.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
 
 import static com.vardanian.movieapp.data.db.MovieDbSchema.*;
 import static com.vardanian.movieapp.data.db.MovieDbSchema.MovieTable.*;
@@ -19,10 +24,11 @@ import static com.vardanian.movieapp.data.db.MovieDbSchema.MovieTable.*;
 public class DatabaseStorage implements MoviesDAO {
 
     private static final String TAG = "DatabaseStorage";
+    private static final long STATE_MS = 10 * 1000;
+    private long timestamp;
     private Context context;
     private MovieOpenHelper dbHelper;
     private SQLiteDatabase db;
-
 
     public DatabaseStorage(Context context) {
         this.context = context.getApplicationContext();
@@ -86,20 +92,62 @@ public class DatabaseStorage implements MoviesDAO {
     }
 
     @Override
-    public List<Movie> getAllMovies() {
-        db = dbHelper.getWritableDatabase();
-        List<Movie> movies = new ArrayList<>();
-        MovieCursorWrapper cursor = queryCrimes(null, null);
-
-        try {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                movies.add(cursor.getMovie());
-                cursor.moveToNext();
-            }
-        } finally {
-            cursor.close();
+    public Observable<List<Movie>> getAllMovies() {
+        if (!isUpToUpdate()) {
+            this.timestamp = System.currentTimeMillis();
+            return Observable.empty();
         }
+        try {
+            final List<Movie> movies = readAllMoviesFromDb();
+
+            if (movies == null || movies.size() == 0) {
+                this.timestamp = System.currentTimeMillis();
+                return Observable.empty();
+            } else {
+                return Observable.create(new Observable.OnSubscribe<List<Movie>>() {
+                    @Override
+                    public void call(Subscriber<? super List<Movie>> subscriber) {
+                        try {
+                            subscriber.onNext(movies);
+                            subscriber.onCompleted();
+                        } catch (Exception e) {
+                            subscriber.onError(e);
+                        }
+                    }
+                });
+            }
+        } catch (CursorIsNullException e) {
+            return Observable.error(e);
+        }
+    }
+
+    private boolean isUpToUpdate() {
+        return System.currentTimeMillis() - timestamp < STATE_MS;
+    }
+
+    private List<Movie> readAllMoviesFromDb() throws CursorIsNullException {
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query(Movie.TABLE_MOVIE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor == null) {
+            throw new CursorIsNullException();
+        }
+
+        List<Movie> movies = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Movie movie  = Movie.getItemFromCursor(cursor);
+                movies.add(movie);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
         return movies;
     }
 

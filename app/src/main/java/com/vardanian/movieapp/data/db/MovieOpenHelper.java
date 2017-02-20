@@ -9,7 +9,7 @@ import static com.vardanian.movieapp.data.db.MovieDbSchema.MovieTable;
 public class MovieOpenHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "movies.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     public MovieOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

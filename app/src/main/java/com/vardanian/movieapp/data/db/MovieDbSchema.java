@@ -7,7 +7,7 @@ public class MovieDbSchema {
 
         public static final class Cols {
             public static final String MOVIE_ID = "id";
-            public static final String MOVIE_TITLE = "title";
+            public static final String MOVIE_TITLE = "original_title";
             public static final String MOVIE_OVERVIEW = "overview";
             public static final String MOVIE_RELEASE_DATE = "release_date";
             public static final String MOVIE_POPULARITY = "popularity";
