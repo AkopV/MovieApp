@@ -3,7 +3,6 @@ package com.vardanian.movieapp.dependency.modules;
 import android.content.Context;
 
 import com.vardanian.movieapp.data.DataRepository;
-import com.vardanian.movieapp.data.network.NetworkStorage;
 import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.presenter.DetailMoviePresenter;
 import com.vardanian.movieapp.presenter.MoviesPresenter;

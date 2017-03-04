@@ -16,7 +16,6 @@ import com.vardanian.movieapp.MovieApp;
 import com.vardanian.movieapp.R;
 import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.model.Movie;
-import com.vardanian.movieapp.presenter.DetailMoviePresenter;
 
 import javax.inject.Inject;
 
@@ -88,7 +87,7 @@ public class DetailMovieActivityFragment extends Fragment implements MVPMovies.D
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
         tvReleaseDate.setText(getString(R.string.release_date) + movie.getReleaseDate());
-        tvPopularity.setText(getString(R.string.popularity) + movie.getPopularity().substring(0, 6));
+        tvPopularity.setText(getString(R.string.popularity) + movie.getPopularity().toString().substring(0, 6));
         tvVoteAverage.setText(getString(R.string.vote_average) + movie.getVoteAverage());
         toolbar.setTitle(movie.getTitle());
     }

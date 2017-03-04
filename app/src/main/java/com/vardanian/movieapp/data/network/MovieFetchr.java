@@ -25,7 +25,7 @@ public class MovieFetchr {
     private static final String TAG = "MovieFetchr";
     private static final String API_KEY = BuildConfig.OPEN_TMDB_API_KEY;
     private static final String MOVIE_ID = "id";
-    private static final String MOVIE_TITLE = "title";
+    private static final String MOVIE_TITLE = "originalTitle";
     private static final String MOVIE_OVERVIEW = "overview";
     private static final String MOVIE_RELEASE_DATE = "release_date";
     private static final String MOVIE_POPULARITY = "popularity";

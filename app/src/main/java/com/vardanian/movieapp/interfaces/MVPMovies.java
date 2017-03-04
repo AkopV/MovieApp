@@ -36,4 +36,8 @@ public interface MVPMovies {
     interface MoviesModel {
         Observable<List<Movie>> fetchMovies();
     }
+
+    interface DetailMovieModel {
+        Observable<Movie> fetchMovie();
+    }
 }

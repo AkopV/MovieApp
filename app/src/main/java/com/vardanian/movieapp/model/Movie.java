@@ -4,12 +4,14 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movie implements Parcelable {
 
-    // keys for packing/unpacking intent
-    // for url building
     public static final String WIDTH_154 = "w154";
     public static final String WIDTH_342 = "w342";
     public static final String WIDTH_500 = "w500";
@@ -24,6 +26,10 @@ public class Movie implements Parcelable {
     public static final String KEY_POPULARITY = "popularity";
     public static final String KEY_RELEASE_DATE = "release_date";
     public static final String KEY_ID = "id";
+    public static final String KEY_ADULT = "adult";
+    public static final String KEY_ORIGINAL_LANGUAGE = "original_language";
+    public static final String KEY_VOTE_COUNT = "vote_count";
+    public static final String KEY_VIDEO = "video";
     public static final String TABLE_MOVIE = "movies";
 
     public static String[] projection = {
@@ -34,7 +40,11 @@ public class Movie implements Parcelable {
             KEY_BACKDROP_PATH,
             KEY_RELEASE_DATE,
             KEY_POPULARITY,
-            KEY_RATE
+            KEY_RATE,
+            KEY_ADULT,
+            KEY_ORIGINAL_LANGUAGE,
+            KEY_VOTE_COUNT,
+            KEY_VIDEO
     };
 
     @SerializedName(KEY_ID)
@@ -53,11 +63,20 @@ public class Movie implements Parcelable {
     public String backdropPath;
     @SerializedName(KEY_RATE)
     public String voteAverage;
+    @SerializedName(KEY_ADULT)
+    public String adult;
+    @SerializedName(KEY_ORIGINAL_LANGUAGE)
+    public String originalLanguage;
+    @SerializedName(KEY_VOTE_COUNT)
+    public String voteCount;
+    @SerializedName(KEY_VIDEO)
+    public String video;
 
     public Movie(){}
 
     public Movie(String id, String title, String overview, String releaseDate, String popularity, String posterPath,
-                 String voteAverage, String backdropPath) {
+                 String voteAverage, String backdropPath, String adult, String originalLanguage, String originalTitle,
+                 String voteCount, String video) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -66,6 +85,10 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
         this.voteAverage = voteAverage;
+        this.adult = adult;
+        this.originalLanguage = originalLanguage;
+        this.voteCount = voteCount;
+        this.video = video;
     }
 
     public static Movie getItemFromCursor(Cursor c) {
@@ -77,6 +100,10 @@ public class Movie implements Parcelable {
         item.popularity = c.getString(c.getColumnIndex(Movie.KEY_POPULARITY));
         item.backdropPath = c.getString(c.getColumnIndex(Movie.KEY_BACKDROP_PATH));
         item.voteAverage = c.getString(c.getColumnIndex(Movie.KEY_RATE));
+        item.adult = c.getString(c.getColumnIndex(Movie.KEY_ADULT));
+        item.originalLanguage = c.getString(c.getColumnIndex(Movie.KEY_ORIGINAL_LANGUAGE));
+        item.voteCount = c.getString(c.getColumnIndex(Movie.KEY_VOTE_COUNT));
+        item.video = c.getString(c.getColumnIndex(Movie.KEY_VIDEO));
 
         return item;
     }
@@ -89,6 +116,10 @@ public class Movie implements Parcelable {
         posterPath = in.readString();
         backdropPath = in.readString();
         voteAverage = in.readString();
+        adult = in.readString();
+        originalLanguage = in.readString();
+        voteCount = in.readString();
+        video = in.readString();
     }
 
     public String getId() {
@@ -164,6 +195,38 @@ public class Movie implements Parcelable {
         this.backdropPath = backdropPath;
     }
 
+    public String getAdult() {
+        return adult;
+    }
+
+    public void setAdult(String adult) {
+        this.adult = adult;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(String voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
     @Override
     public String toString() {
         return title + " " + id;
@@ -184,6 +247,10 @@ public class Movie implements Parcelable {
         dest.writeString(posterPath);
         dest.writeString(backdropPath);
         dest.writeString(voteAverage);
+        dest.writeString(adult);
+        dest.writeString(originalLanguage);
+        dest.writeString(voteCount);
+        dest.writeString(video);
     }
 
     @SuppressWarnings("unused")

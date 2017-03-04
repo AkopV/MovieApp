@@ -3,7 +3,7 @@ package com.vardanian.movieapp.data;
 import android.content.Context;
 
 import com.vardanian.movieapp.data.db.dao.DatabaseStorage;
-import com.vardanian.movieapp.data.network.NetworkStorage;
+import com.vardanian.movieapp.data.network.RetrofitNetworkRepository;
 import com.vardanian.movieapp.interfaces.MVPMovies;
 import com.vardanian.movieapp.model.Movie;
 
@@ -16,13 +16,13 @@ public class DataRepository implements MVPMovies.MoviesModel {
 
     private final Context context;
     private final DatabaseStorage db;
-    private final NetworkStorage rest;
+    private final RetrofitNetworkRepository rest;
 
 
     public DataRepository(Context context) {
         this.context = context;
         db = new DatabaseStorage(context);
-        rest = new NetworkStorage(context);
+        rest = new RetrofitNetworkRepository();
     }
 
     @Override

@@ -20,13 +20,17 @@ public class MovieOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + MovieTable.NAME + "( " +
                 " _ID INTEGER PRIMARY KEY, " +
                 MovieTable.Cols.MOVIE_ID + " TEXT NOT NULL, " +
-                MovieTable.Cols.MOVIE_TITLE + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_OVERVIEW + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_RELEASE_DATE + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_POPULARITY + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_POSTER_PATH + " TEXT NOT NULL, " +
                 MovieTable.Cols.MOVIE_VOTE_AVERAGE + " TEXT NOT NULL, " +
-                MovieTable.Cols.MOVIE_BACKDROP_PATH + " TEXT NOT NULL "
+                MovieTable.Cols.MOVIE_BACKDROP_PATH + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_LANGUAGE + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_TITLE + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_ADULT + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_VIDEO + " TEXT NOT NULL, " +
+                MovieTable.Cols.MOVIE_VOTE_COUNT + " TEXT NOT NULL "
                 + ") "
         );
     }

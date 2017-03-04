@@ -27,7 +27,7 @@
             android:label="@string/title_activity_detail_movie"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="com.vardanian.movieapp.DetailMovieActivity" />
+                <action android:name=".view.detailMovie.DetailMovieActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

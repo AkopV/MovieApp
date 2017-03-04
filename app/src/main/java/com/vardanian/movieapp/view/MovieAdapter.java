@@ -1,5 +1,6 @@
 package com.vardanian.movieapp.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -82,7 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), DetailMovieActivity.class);
             intent.putExtra(Movie.class.getName(), movie);
-            v.getContext().startActivity(intent);
+            ((Activity) context).startActivityForResult(intent, Activity.RESULT_OK);
         }
     }
 }

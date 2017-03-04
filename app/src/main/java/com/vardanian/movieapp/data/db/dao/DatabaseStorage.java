@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vardanian.movieapp.data.db.MovieCursorWrapper;
-import com.vardanian.movieapp.data.db.MovieDbSchema;
 import com.vardanian.movieapp.data.db.MovieOpenHelper;
 import com.vardanian.movieapp.exceptions.CursorIsNullException;
 import com.vardanian.movieapp.model.Movie;
@@ -38,13 +37,17 @@ public class DatabaseStorage implements MoviesDAO {
     private static ContentValues getContentValues(Movie movie) {
         ContentValues values = new ContentValues();
         values.put(Cols.MOVIE_ID, movie.getId());
-        values.put(Cols.MOVIE_TITLE, movie.getTitle());
         values.put(Cols.MOVIE_OVERVIEW, movie.getOverview());
         values.put(Cols.MOVIE_RELEASE_DATE, movie.getReleaseDate());
         values.put(Cols.MOVIE_POPULARITY, movie.getPopularity());
         values.put(Cols.MOVIE_POSTER_PATH, movie.posterPath);
         values.put(Cols.MOVIE_BACKDROP_PATH, movie.backdropPath);
         values.put(Cols.MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
+        values.put(Cols.MOVIE_ADULT, movie.getAdult());
+        values.put(Cols.MOVIE_LANGUAGE, movie.getOriginalLanguage());
+        values.put(Cols.MOVIE_TITLE, movie.getTitle());
+        values.put(Cols.MOVIE_VOTE_COUNT, movie.getVoteCount());
+        values.put(Cols.MOVIE_VIDEO, movie.getVideo());
 
         return values;
     }

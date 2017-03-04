@@ -28,6 +28,7 @@ public class DetailMoviePresenter implements MVPMovies.DetailMoviePresenter {
         } else {
             Movie movie = intent.getParcelableExtra(
                     Movie.class.getName());
+
             DetailMoviePresenter.this.view.onMovieReceived(movie);
         }
     }
