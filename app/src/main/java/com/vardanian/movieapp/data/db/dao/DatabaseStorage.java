@@ -157,10 +157,13 @@ public class DatabaseStorage implements MoviesDAO {
     @Override
     public void saveAllMovies(List<Movie> movies) {
         db = dbHelper.getWritableDatabase();
-        for (Movie movie : movies){
+
+        for (Movie movie : movies) {
             ContentValues values = getContentValues(movie);
-            long id = db.insert(MovieTable.NAME, null, values);
-            Log.i(TAG, "Inserted id=" + id);
+            if (hasMovie(movie.getId())) {
+                long id = db.insert(MovieTable.NAME, null, values);
+                Log.i(TAG, "Inserted id=" + id);
+            }
         }
         db.close();
     }
@@ -185,5 +188,29 @@ public class DatabaseStorage implements MoviesDAO {
         db.close();
 
         return deleteSuccessfull;
+    }
+
+    public boolean hasMovie(String id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String searchValue = "SELECT * FROM " + NAME + " WHERE " + Cols.MOVIE_ID + " =?";
+        // Add the String you are searching by here.
+        // Put it in an array to avoid an unrecognized token error
+        Cursor c = db.rawQuery(searchValue, new String[] {id});
+
+        boolean hasMovie = false;
+        if (c.moveToFirst()) {
+            hasMovie = true;
+
+            // Region if you had multiple records to check for, use this region.
+            int count = 0;
+            while (c.moveToNext()) {
+                count++;
+            }
+            // Here, count is records found
+            Log.d(TAG, String.format("%d records found", count));
+        }
+        c.close();
+        db.close();
+        return hasMovie;
     }
 }

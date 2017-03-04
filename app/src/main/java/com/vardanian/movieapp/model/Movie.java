@@ -18,7 +18,7 @@ public class Movie implements Parcelable {
     public static final String WIDTH_780 = "w780";
 
     public static final String URL_IMAGE_TMDB_DEFAULT = "http://image.tmdb.org/t/p/";
-    public static final String KEY_TITLE = "original_title";
+    public static final String KEY_TITLE = "title";
     public static final String KEY_POSTER_PATH = "poster_path";
     public static final String KEY_BACKDROP_PATH = "backdrop_path";
     public static final String KEY_OVERVIEW = "overview";
